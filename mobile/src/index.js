@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, StatusBar } from "react-native";
+import { SafeAreaView, FlatList, Text, StyleSheet, StatusBar } from "react-native";
 
 import api from "./services/api";
 
@@ -23,10 +23,21 @@ export default function App() {
 
   return (
     <>
-      <StatusBar barStyle="light-content" backgroundColor="#7159C1" translucent />
-      <View style={styles.container}>
-        <Text style={styles.title}>Hello World React Native</Text>
-      </View>
+      <StatusBar barStyle="light-content" backgroundColor="#7159C1" />
+      <SafeAreaView style={styles.container}>
+        <FlatList
+          data={projects}
+          keyExtractor={(project) => project.id}
+          renderItem={({ item: project }) => <Text style={styles.project}>{project.title}</Text>}
+        ></FlatList>
+        {/* <View style={styles.container}>
+        {projects.map((project) => (
+          <Text key={project.id} style={styles.project}>
+          {project.title}
+          </Text>
+          ))}
+        </View> */}
+      </SafeAreaView>
     </>
   );
 }
@@ -35,12 +46,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#7159C1",
-    justifyContent: "center",
-    alignItems: "center",
+    /* justifyContent: "center",
+    alignItems: "center", */
   },
-  title: {
+  project: {
     color: "#FFF",
-    fontSize: 32,
-    fontWeight: "bold",
+    fontSize: 20,
   },
 });
