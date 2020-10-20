@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, FlatList, Text, StyleSheet, StatusBar } from "react-native";
+import {
+  SafeAreaView,
+  FlatList,
+  Text,
+  StyleSheet,
+  StatusBar,
+  TouchableOpacity,
+} from "react-native";
 
 import api from "./services/api";
 
@@ -21,6 +28,17 @@ export default function App() {
       });
   }, []);
 
+  async function handleAddProject() {
+    const response = await api.post("projects", {
+      title: `Novo projeto ${Date.now()}`,
+      owner: "Bruno Mayerle Leite",
+    });
+
+    const project = response.data;
+
+    setProjects([...projects, project]);
+  }
+
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="#7159C1" />
@@ -30,13 +48,9 @@ export default function App() {
           keyExtractor={(project) => project.id}
           renderItem={({ item: project }) => <Text style={styles.project}>{project.title}</Text>}
         ></FlatList>
-        {/* <View style={styles.container}>
-        {projects.map((project) => (
-          <Text key={project.id} style={styles.project}>
-          {project.title}
-          </Text>
-          ))}
-        </View> */}
+        <TouchableOpacity style={styles.button} activeOpacity={0.6} onPress={handleAddProject}>
+          <Text style={styles.buttonText}>Adicionar projeto</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </>
   );
@@ -52,5 +66,19 @@ const styles = StyleSheet.create({
   project: {
     color: "#FFF",
     fontSize: 20,
+  },
+  button: {
+    alignSelf: "stretch",
+    backgroundColor: "#FFF",
+    margin: 20,
+    height: 50,
+    borderRadius: 4,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  buttonText: {
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
